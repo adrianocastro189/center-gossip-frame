@@ -13,6 +13,13 @@ function CenterGossipFrame:centralizeQuestFrame()
   self:centralizeFrame(QuestFrame)
 end
 
+--[[
+Positions a frame in the center of the screen.
+
+This method was designed to be used with the GossipFrame and QuestFrame. It
+will probably work with many other frames, but must be well tested if the
+addon covers other frames in the future.
+]]
 function CenterGossipFrame:centralizeFrame(frame)
   frame:ClearAllPoints()
   frame:SetPoint('CENTER', UIParent, 'CENTER', 0, 0)
