@@ -1,0 +1,11 @@
+## Author: Adriano Castro
+## Interface: 100207
+## Name: Center Gossip Frame
+## Notes: A very simple addon to centralize the main gossip and quest frames.
+## Title: Center Gossip Frame |cffffee771.0.0|r
+## Version: 1.0.0
+## X-Curse-Project-ID: 
+
+lib\stormwind-library.lua
+
+CenterGossipFrame.lua
