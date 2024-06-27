@@ -1,6 +1,14 @@
-# %AddonName%
+# Center Gossip Frame
 
-%Description%
+Center Gossip Frame centralizes the following frames on the screen:
+
+* Gossip Frame
+* Quest Frame
+
+This addon was designed to make it easier for players to interact with NPCs
+and quest givers by centralizing the frames that are usually displayed on the
+left side of the screen and that can be hard to see when the player is using
+a large and wide monitor.
 
 ## ❤️ Support this project
 
@@ -11,53 +19,27 @@ Every contribution or subscription is deeply appreciated and also supports
 the [Stormwind Library project](https://github.com/adrianocastro189/stormwind-library),
 which is the framework used to build this addon.
 
-## How this addon can be used
-
-%Description%
-
 ## How to use this addon
 
-%Description%
+Just install the addon and it will automatically centralize the frames above.
 
 ## Available commands
 
-%Description%
-
-These are the available commands:
-
-* `/%command1% %operation1% %arg1% %arg2%`: %Description%
-* `/%command2% %operation2% %arg1% %arg2%`: %Description%
-* `/%command3% %operation3% %arg1% %arg2%`: %Description%
+For now, there are no commands available for this addon.
 
 ## What's on the roadmap for the next versions
 
-* **%Item 1:** %Description%
-* **%Item 2:** %Description%
-* **%Item 3:** %Description%
-
-## Limitations
-
-The addon has some limitations that players should be aware of, mostly
-due to the limitations of the World of Warcraft API and the way the addon
-was designed:
-
-* **%Item 1:** %Description%
-* **%Item 2:** %Description%
-* **%Item 3:** %Description%
-
-## Known issues
-
-This is a list of known issues that players may encounter when using the
-addon that are already being addressed and will be fixed in future versions:
-
-* **%Item 1:** %Description%
-* **%Item 2:** %Description%
-* **%Item 3:** %Description%
+* **Cover more frames:** I'm aware there are lots of frames that could be also
+  centralized, but they'll be added in future versions.
+* **Automatic repositioning:** In some cases, players may want to preview the
+  quest rewards before turning in the quest. In these cases, the game will add
+  a closet on the right side of the quest frame and move it back to the left
+  side. Automatic repositionings like those are not yet supported by the addon.
+* **Option to disable the addon:** There is no option to disable the addon
+  in-game. Players who want to disable it will need to deactivate it.
 
 ## Changelog
 
-#### %yyyy.mm.dd - version x.y.z%
+#### 2024.06.27 - version 1.0.0
 
-* %Item1%
-* %Item2%
-* %Item3%
+* First version of the addon covering the Gossip and Frame frames
