@@ -42,4 +42,4 @@ For now, there are no commands available for this addon.
 
 #### 2024.06.27 - version 1.0.0
 
-* First version of the addon covering the Gossip and Frame frames
+* First version of the addon covering the Gossip and Quest frames
