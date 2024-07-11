@@ -40,6 +40,10 @@ For now, there are no commands available for this addon.
 
 ## Changelog
 
-#### 2024.06.27 - version 1.0.0
+### 2024.07.11 - version 1.0.1
+
+* Update TOC interface number for Classic Era
+
+### 2024.06.27 - version 1.0.0
 
 * First version of the addon covering the Gossip and Quest frames
