@@ -40,6 +40,10 @@ For now, there are no commands available for this addon.
 
 ## Changelog
 
+### yyyy.mm.dd - version 1.2.0
+
+* Update Stormwind Library to version 1.9.0
+
 ### 2024.07.11 - version 1.0.1
 
 * Update TOC interface number for Classic Era

@@ -1,4 +1,4 @@
-CenterGossipFrame = StormwindLibrary_v1_6_0.new({
+CenterGossipFrame = StormwindLibrary_v1_9_0.new({
   colors = {
     primary = 'ED5859'
   },
