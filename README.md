@@ -2,8 +2,10 @@
 
 Center Gossip Frame centralizes the following frames on the screen:
 
-* Gossip Frame
-* Quest Frame
+* Gossip windows in general
+* Merchant windows
+* Quest frames to accept, complete, and turn in quests
+* Taxi frame from the flight master
 
 This addon was designed to make it easier for players to interact with NPCs
 and quest givers by centralizing the frames that are usually displayed on the
@@ -37,6 +39,12 @@ For now, there are no commands available for this addon.
   side. Automatic repositionings like those are not yet supported by the addon.
 * **Option to disable the addon:** There is no option to disable the addon
   in-game. Players who want to disable it will need to deactivate it.
+
+## Known issues
+
+* **Issues with TradeSkillMaster (TSM):** When TSM is taking over the merchant
+  frame, the centralization process may not work as expected and show both
+  frames on the screen. This is a known issue and is already being worked on.
 
 ## Changelog
 
