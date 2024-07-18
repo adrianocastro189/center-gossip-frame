@@ -35,16 +35,25 @@ TestCenterGossipFrame = BaseTestClass:new()
         }, frame.points)
     end
 
-    -- @covers CenterGossipFrame:centralizeFrame()
-    function TestCenterGossipFrame:testCentralizeFrameWhenCantBeCentralized()
-        local frame = CreateFrame()
+    -- @covers CenterGossipFrame:maybeCentralizeFrame()
+    function TestCenterGossipFrame:testMaybeCentralizeFrame()
+        local function execution(canBeCentralized, shouldInvokeCentralizeFrame)
+            local frame = CreateFrame()
+            frame.centralizeInvoked = false
 
-        CenterGossipFrame.canBeCentralized = function() return false end
+            CenterGossipFrame.canBeCentralized = function() return canBeCentralized end
+            CenterGossipFrame.centralizeFrame = function() frame.centralizeInvoked = true end
 
-        CenterGossipFrame:centralizeFrame(frame)
+            CenterGossipFrame:maybeCentralizeFrame(frame)
 
-        lu.assertIsNil(frame.clearAllPointsInvoked)
-        lu.assertNil(frame.points)
+            lu.assertEquals(shouldInvokeCentralizeFrame, frame.centralizeInvoked)
+        end
+
+        -- frame cannot be centralized
+        execution(false, false)
+
+        -- frame can be centralized
+        execution(true, true)
     end
 
     -- @covers CenterGossipFrame
