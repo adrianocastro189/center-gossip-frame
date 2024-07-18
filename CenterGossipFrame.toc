@@ -4,7 +4,7 @@
 ## Notes: A very simple addon to centralize the main gossip and quest frames.
 ## Title: Center Gossip Frame |cffffee771.2.0|r
 ## Version: 1.2.0
-## X-Curse-Project-ID: 
+## X-Curse-Project-ID: 1051711
 
 lib\stormwind-library.lua
 
