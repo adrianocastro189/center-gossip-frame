@@ -42,6 +42,8 @@ For now, there are no commands available for this addon.
 
 ### yyyy.mm.dd - version 1.2.0
 
+* Add a sanity check to the centralization function to avoid errors when frames
+  can't be found or moved
 * Update Stormwind Library to version 1.9.0
 
 ### 2024.07.11 - version 1.0.1

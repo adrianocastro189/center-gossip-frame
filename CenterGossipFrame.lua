@@ -6,6 +6,16 @@ CenterGossipFrame = StormwindLibrary_v1_9_0.new({
 })
 
 --[[
+Determines whether a frame can be centralized or not.
+]]
+function CenterGossipFrame:canBeCentralized(frame)
+  return
+    frame ~= nil and
+    frame.ClearAllPoints ~= nil and
+    frame.SetPoint ~= nil
+end
+
+--[[
 Positions a frame in the center of the screen.
 
 This method was designed to be used with the GossipFrame and QuestFrame. It
@@ -13,6 +23,8 @@ will probably work with many other frames, but must be well tested if the
 addon covers other frames in the future.
 ]]
 function CenterGossipFrame:centralizeFrame(frame)
+  if not self:canBeCentralized(frame) then return end
+
   frame:ClearAllPoints()
   frame:SetPoint('CENTER', UIParent, 'CENTER', 0, 0)
 end
@@ -26,5 +38,5 @@ end
 
 -- events that trigger when the gossip frame is shown
 CenterGossipFrame.events:listenOriginal('GOSSIP_SHOW', function ()
-    CenterGossipFrame:centralizeFrame(GossipFrame)
+  CenterGossipFrame:centralizeFrame(GossipFrame)
 end)
