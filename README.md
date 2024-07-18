@@ -42,8 +42,13 @@ For now, there are no commands available for this addon.
 
 ### yyyy.mm.dd - version 1.2.0
 
+* A complete refactor of the centralization process to prevent edge cases 
+  where the frames weren't being centralized properly due to race conditions 
+  between the events that trigger the centralization and the frames being 
+  repositioned by the game
 * Add a sanity check to the centralization function to avoid errors when frames
   can't be found or moved
+* New frames covered: Taxi Frame from the flight master and merchant windows
 * Update Stormwind Library to version 1.9.0
 
 ### 2024.07.11 - version 1.0.1
