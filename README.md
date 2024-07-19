@@ -2,8 +2,10 @@
 
 Center Gossip Frame centralizes the following frames on the screen:
 
-* Gossip Frame
-* Quest Frame
+* Gossip windows in general
+* Merchant windows
+* Quest frames to accept, complete, and turn in quests
+* Taxi frame from the flight master
 
 This addon was designed to make it easier for players to interact with NPCs
 and quest givers by centralizing the frames that are usually displayed on the
@@ -38,7 +40,24 @@ For now, there are no commands available for this addon.
 * **Option to disable the addon:** There is no option to disable the addon
   in-game. Players who want to disable it will need to deactivate it.
 
+## Known issues
+
+* **Issues with TradeSkillMaster (TSM):** When TSM is taking over the merchant
+  frame, the centralization process may not work as expected and show both
+  frames on the screen. This is a known issue and is already being worked on.
+
 ## Changelog
+
+### 2024.07.19 - version 1.2.0
+
+* A complete refactor of the centralization process to prevent edge cases 
+  where the frames weren't being centralized properly due to race conditions 
+  between the events that trigger the centralization and the frames being 
+  repositioned by the game
+* Add a sanity check to the centralization function to avoid errors when frames
+  can't be found or moved
+* New frames covered: Taxi Frame from the flight master and merchant windows
+* Update Stormwind Library to version 1.9.0
 
 ### 2024.07.11 - version 1.0.1
 
