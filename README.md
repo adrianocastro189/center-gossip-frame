@@ -48,6 +48,10 @@ For now, there are no commands available for this addon.
 
 ## Changelog
 
+### 2024.07.24 - version 1.1.1
+
+* Update TOC interface number for Retail
+
 ### 2024.07.19 - version 1.1.0
 
 * A complete refactor of the centralization process to prevent edge cases 
