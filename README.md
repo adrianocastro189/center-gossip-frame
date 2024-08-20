@@ -48,6 +48,10 @@ For now, there are no commands available for this addon.
 
 ## Changelog
 
+### yyyy.mm.dd - version 1.2.0
+
+* Update Stormwind Library to version 1.12.1
+
 ### 2024.07.24 - version 1.1.1
 
 * Update TOC interface number for Retail
