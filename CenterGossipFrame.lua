@@ -82,6 +82,23 @@ function CenterGossipFrame:maybeCentralizeFrame(frame)
 end
 
 --[[
+May register the ClassTrainerFrame listener.
+
+During development, it was noticed that ClassTrainerFrame doesn't exist until
+players interact with a class trainer. That said, it can't be registered when the
+addon initializes like the other frames.
+
+Still, it must be registered only once, and that's why this method manages a flag.
+]]
+function CenterGossipFrame:maybeRegisterClassTrainerFrame()
+    if CenterGossipFrame.classTrainerFrameRegistered then return end
+
+    CenterGossipFrame:applyListener(ClassTrainerFrame)
+
+    CenterGossipFrame.classTrainerFrameRegistered = true
+end
+
+--[[
 Determines whether the GossipFrame should be centralized or not if it's
 MerchantFrame.
 
