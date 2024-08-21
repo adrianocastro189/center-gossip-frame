@@ -82,3 +82,10 @@ CenterGossipFrame:applyListener(GossipFrame)
 CenterGossipFrame:applyListener(MerchantFrame)
 CenterGossipFrame:applyListener(QuestFrame)
 CenterGossipFrame:applyListener(TaxiFrame)
+
+local events = CenterGossipFrame.events
+
+events:listen(events.EVENT_NAME_PLAYER_LOGIN, function()
+    -- initializes the TSM integration
+    CenterGossipFrame.tsmIntegration = CenterGossipFrame:new('CenterGossipFrame/TradeSkillMasterIntegration')
+end)

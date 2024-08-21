@@ -127,6 +127,7 @@ TestCase.new()
     :setTestClass(TestCenterGossipFrame)
     :setExecution(function()
         lu.assertNotIsNil(CenterGossipFrame)
+        lu.assertNotIsNil(CenterGossipFrame.tsmIntegration)
     end)
     :register()
 
