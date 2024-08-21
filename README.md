@@ -46,7 +46,7 @@ For now, there are no commands available for this addon.
 
 ## Changelog
 
-### yyyy.mm.dd - version 1.2.0
+### 2024.08.21 - version 1.2.0
 
 * New frames covered: Trainer Frame for learning class skills (Classic only) and
   profession skills (all versions)

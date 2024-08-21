@@ -1,5 +1,5 @@
 ## Author: Adriano Castro
-## Interface: 110000
+## Interface: 110002
 ## Name: Center Gossip Frame
 ## Notes: A very simple addon to centralize the main gossip and quest frames.
 ## Title: Center Gossip Frame |cffffee771.2.0|r
