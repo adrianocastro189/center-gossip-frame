@@ -73,12 +73,38 @@ May centralize a frame if it can be centralized.
 @param frame The frame to be centralized
 ]]
 function CenterGossipFrame:maybeCentralizeFrame(frame)
+    -- @TODO: Remove this condition when the frame class implementation is done <2024.08.21>
+    if not self:shouldCentralizeIfMerchantFrame(frame) then return end
+
     if not self:isFrameCentered(frame) then
         self:centralizeFrame(frame)
     end
+end
+
+--[[
+Determines whether the GossipFrame should be centralized or not if it's
+MerchantFrame.
+
+@NOTE: This is a temporary solution that will be migrated in upcoming versions when
+       every frame will be encapsulated in a class, so these conditions will be
+       later refactored.
+]]
+function CenterGossipFrame:shouldCentralizeIfMerchantFrame(frame)
+    local isMerchantFrame = frame == MerchantFrame
+
+    local isTsmEnabledForMerchantFrame = isMerchantFrame and CenterGossipFrame.tsmIntegration:isMerchantFrameVisible()
+
+    return not isMerchantFrame or not isTsmEnabledForMerchantFrame
 end
 
 CenterGossipFrame:applyListener(GossipFrame)
 CenterGossipFrame:applyListener(MerchantFrame)
 CenterGossipFrame:applyListener(QuestFrame)
 CenterGossipFrame:applyListener(TaxiFrame)
+
+local events = CenterGossipFrame.events
+
+events:listen(events.EVENT_NAME_PLAYER_LOGIN, function()
+    -- initializes the TSM integration
+    CenterGossipFrame.tsmIntegration = CenterGossipFrame:new('CenterGossipFrame/TradeSkillMasterIntegration')
+end)

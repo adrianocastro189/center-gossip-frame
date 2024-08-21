@@ -127,6 +127,7 @@ TestCase.new()
     :setTestClass(TestCenterGossipFrame)
     :setExecution(function()
         lu.assertNotIsNil(CenterGossipFrame)
+        lu.assertNotIsNil(CenterGossipFrame.tsmIntegration)
     end)
     :register()
 
@@ -141,6 +142,7 @@ TestCase.new()
             .new(CenterGossipFrame)
             :mockMethod('isFrameCentered', function() return data.isFrameCentered end)
             :mockMethod('centralizeFrame')
+            :mockMethod('shouldCentralizeIfMerchantFrame', function() return data.shouldCentralizeIfMerchantFrame end)
 
         CenterGossipFrame:maybeCentralizeFrame(frame)
 
@@ -154,12 +156,64 @@ TestCase.new()
     :setScenarios({
         ['frame is centered'] = {
             isFrameCentered = true,
+            shouldCentralizeIfMerchantFrame = true,
             shouldInvokeCentralizeFrame = false,
         },
         ['frame is not centered'] = {
             isFrameCentered = false,
+            shouldCentralizeIfMerchantFrame = true,
             shouldInvokeCentralizeFrame = true,
         },
+        ['MerchantFrame'] = {
+            isFrameCentered = true,
+            shouldCentralizeIfMerchantFrame = false,
+            shouldInvokeCentralizeFrame = false,
+        },
+    })
+    :register()
+
+-- @covers CenterGossipFrame:shouldCentralizeIfMerchantFrame()
+TestCase.new()
+    :setName('shouldCentralizeIfMerchantFrame')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function(data)
+        _G['MerchantFrame'] = data.merchantFrame
+
+        CenterGossipFrame.tsmIntegration = Spy
+            .new()
+            :mockMethod('isMerchantFrameVisible', function() return data.isTsmMerchantFrameVisible end)
+        
+        local result = CenterGossipFrame:shouldCentralizeIfMerchantFrame(data.frame)
+
+        lu.assertEquals(data.expectedResult, result)
+    end)
+    :setScenarios({
+        ['not MerchantFrame'] = {
+            frame = Spy.new(),
+            merchantFrame = Spy.new(),
+            isTsmMerchantFrameVisible = true,
+            expectedResult = true,
+        },
+        ['TSM not visible'] = function ()
+            local merchantFrame = Spy.new()
+
+            return {
+                frame = merchantFrame,
+                merchantFrame = merchantFrame,
+                isTsmMerchantFrameVisible = false,
+                expectedResult = true,
+            }
+        end,
+        ['TSM visible'] = function ()
+            local merchantFrame = Spy.new()
+
+            return {
+                frame = merchantFrame,
+                merchantFrame = merchantFrame,
+                isTsmMerchantFrameVisible = true,
+                expectedResult = false,
+            }
+        end,
     })
     :register()
 -- end of MultiTargetsTest
