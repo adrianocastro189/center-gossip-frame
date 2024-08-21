@@ -1,69 +1,70 @@
----@diagnostic disable: duplicate-set-field
-
 TestCenterGossipFrame = BaseTestClass:new()
-    -- @covers CenterGossipFrame:applyListener()
-    function TestCenterGossipFrame:testApplyListener()
-        CenterGossipFrame.canBeCentralized = function() return true end
-        CenterGossipFrame.maybeCentralizeFrame = function(self, gameFrame)
-            CenterGossipFrame.centralizeInvoked = true
-            gameFrame.centralized = true
-        end
 
-        local frame = {
-            HookScript = function(self, event, callback)
-                self.event = event
-                self.callback = callback
-            end
-        }
+-- @covers CenterGossipFrame:applyListener()
+TestCase.new()
+    :setName('applyListener')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function(data)
+        CenterGossipFrame = Spy
+            .new(CenterGossipFrame)
+            :mockMethod('canBeCentralized', function() return data.canBeCentralized end)
+            :mockMethod('maybeCentralizeFrame')
 
-        CenterGossipFrame:applyListener(frame)
+        local frameSpy = Spy
+            .new()
+            :mockMethod('HookScript')
 
-        lu.assertEquals('OnUpdate', frame.event)
-        lu.assertIsNil(CenterGossipFrame.centralizeInvoked)
-        lu.assertIsNil(frame.centralized)
+        CenterGossipFrame:applyListener(frameSpy)
 
-        frame.callback()
+        CenterGossipFrame:getMethod('canBeCentralized'):assertCalledOnceWith(frameSpy)
+        frameSpy:getMethod('HookScript'):assertCalledOrNot(data.shouldHookScript)
+    end)
+    :setScenarios({
+        ['can be centralized'] = {
+            canBeCentralized = true,
+            shouldHookScript = true,
+        },
+        ["can't be centralized"] = {
+            canBeCentralized = false,
+            shouldHookScript = false,
+        },
+    })
+    :register()
 
-        lu.assertTrue(CenterGossipFrame.centralizeInvoked)
-        lu.assertTrue(frame.centralized)
-    end
+-- @covers CenterGossipFrame:canBeCentralized()
+TestCase.new()
+    :setName('canBeCentralized')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function(data)
+        local result = CenterGossipFrame:canBeCentralized(data.frame)
 
-    -- @covers CenterGossipFrame:applyListener()
-    function TestCenterGossipFrame:testApplyListenerWhenCantBeCentralized()
-        CenterGossipFrame.canBeCentralized = function() return false end
-        
-        local frame = {
-            HookScript = function(self)
-                self.scriptHooked = true
-            end
-        }
+        lu.assertEquals(data.expected, result)
+    end)
+    :setScenarios({
+        ['frame is nil'] = {
+            frame = nil,
+            expected = false,
+        },
+        ['frame.ClearAllPoints is nil'] = {
+            frame = { SetPoint = function() end },
+            expected = false,
+        },
+        ['frame.SetPoint is nil'] = {
+            frame = { ClearAllPoints = function() end },
+            expected = false,
+        },
+        ['frame is valid'] = {
+            frame = { ClearAllPoints = function() end, SetPoint = function() end },
+            expected = true,
+        },
+    })
+    :register()
 
-        CenterGossipFrame:applyListener(frame)
-
-        lu.assertIsNil(frame.scriptHooked)
-    end    
-
-    -- @covers CenterGossipFrame:canBeCentralized
-    function TestCenterGossipFrame:testCanBeCentralized()
-        local function execution(frame, expected)
-            lu.assertEquals(expected, CenterGossipFrame:canBeCentralized(frame))
-        end
-
-        -- frame is nil
-        execution(nil, false)
-
-        -- frame.ClearAllPoints is nil
-        execution({SetPoint = function() end}, false)
-
-        -- frame.SetPoint is nil
-        execution({ClearAllPoints = function() end}, false)
-
-        -- frame is valid
-        execution({ClearAllPoints = function() end, SetPoint = function() end}, true)
-    end
-
-    -- @covers CenterGossipFrame:centralizeFrame()
-    function TestCenterGossipFrame:testCentralizeFrame()
+-- @covers CenterGossipFrame:centralizeFrame()
+TestCase.new()
+    :setName('centralizeFrame')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function(data)
         local frame = CreateFrame()
 
         CenterGossipFrame:centralizeFrame(frame)
@@ -77,50 +78,88 @@ TestCenterGossipFrame = BaseTestClass:new()
                 yOfs = 0,
             }
         }, frame.points)
-    end
+    end)
+    :register()
 
-    -- @covers CenterGossipFrame:isFrameCentered()
-    function TestCenterGossipFrame:testIsFrameCentered()
-        local function execution(point, relativeTo, relativePoint, offsetX, offsetY, expected)
-            local frame = {
-                GetPoint = function()
-                    return point, relativeTo, relativePoint, offsetX, offsetY
-                end
-            }
+-- @covers CenterGossipFrame:isFrameCentered()
+TestCase.new()
+    :setName('isFrameCentered')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function(data)
+        local frameSpy = Spy
+            .new()
+            :mockMethod('GetPoint', function()
+                return
+                    data.point,
+                    data.relativeTo,
+                    data.relativePoint,
+                    data.offsetX,
+                    data.offsetY
+            end)
 
-            lu.assertEquals(expected, CenterGossipFrame:isFrameCentered(frame))
-        end
+        local result = CenterGossipFrame:isFrameCentered(frameSpy)
 
-        -- frame is not centered
-        execution('TOPLEFT', UIParent, 'TOPLEFT', 0, 0, false)
+        lu.assertEquals(data.expected, result)
+    end)
+    :setScenarios({
+        ['frame is not centered'] = {
+            point = 'TOPLEFT',
+            relativeTo = UIParent,
+            relativePoint = 'TOPLEFT',
+            offsetX = 0,
+            offsetY = 0,
+            expected = false,
+        },
+        ['frame is centered'] = {
+            point = 'CENTER',
+            relativeTo = UIParent,
+            relativePoint = 'CENTER',
+            offsetX = 0,
+            offsetY = 0,
+            expected = true,
+        },
+    })
+    :register()
 
-        -- frame is centered
-        execution('CENTER', UIParent, 'CENTER', 0, 0, true)
-    end
-
-    -- @covers CenterGossipFrame
-    function TestCenterGossipFrame:testMainAddonFile()
+-- @covers CenterGossipFrame
+TestCase.new()
+    :setName('mainAddonFile')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function()
         lu.assertNotIsNil(CenterGossipFrame)
-    end
+    end)
+    :register()
 
-    -- @covers CenterGossipFrame:maybeCentralizeFrame()
-    function TestCenterGossipFrame:testMaybeCentralizeFrame()
-        local function execution(isFrameCentered, shouldInvokeCentralizeFrame)
-            local frame = CreateFrame()
-            frame.centralizeInvoked = false
+-- @covers CenterGossipFrame:maybeCentralizeFrame()
+TestCase.new()
+    :setName('maybeCentralizeFrame')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function(data)
+        local frame = Spy.new()
 
-            CenterGossipFrame.isFrameCentered = function() return isFrameCentered end
-            CenterGossipFrame.centralizeFrame = function() frame.centralizeInvoked = true end
+        CenterGossipFrame = Spy
+            .new(CenterGossipFrame)
+            :mockMethod('isFrameCentered', function() return data.isFrameCentered end)
+            :mockMethod('centralizeFrame')
 
-            CenterGossipFrame:maybeCentralizeFrame(frame)
+        CenterGossipFrame:maybeCentralizeFrame(frame)
 
-            lu.assertEquals(shouldInvokeCentralizeFrame, frame.centralizeInvoked)
+        if data.shouldInvokeCentralizeFrame then
+            CenterGossipFrame:getMethod('isFrameCentered'):assertCalledOnceWith(frame)
+            return
         end
 
-        -- frame is centered
-        execution(true, false)
-
-        -- frame is not centered
-        execution(false, true)
-    end
+        CenterGossipFrame:getMethod('centralizeFrame'):assertNotCalled()
+    end)
+    :setScenarios({
+        ['frame is centered'] = {
+            isFrameCentered = true,
+            shouldInvokeCentralizeFrame = false,
+        },
+        ['frame is not centered'] = {
+            isFrameCentered = false,
+            shouldInvokeCentralizeFrame = true,
+        },
+    })
+    :register()
 -- end of MultiTargetsTest
