@@ -42,11 +42,17 @@ For now, there are no commands available for this addon.
 
 ## Known issues
 
-* **Issues with TradeSkillMaster (TSM):** When TSM is taking over the merchant
-  frame, the centralization process may not work as expected and show both
-  frames on the screen. This is a known issue and is already being worked on.
+(None)
 
 ## Changelog
+
+### 2024.08.21 - version 1.2.0
+
+* New frames covered: Trainer Frame for learning class skills (Classic only) and
+  profession skills (all versions)
+* Fix an incompatibility issue with TradeSkillMaster that was causing the merchant 
+  frame to be displayed twice on the screen when it was overriden by TSM UI
+* Update Stormwind Library to version 1.12.1
 
 ### 2024.07.24 - version 1.1.1
 
