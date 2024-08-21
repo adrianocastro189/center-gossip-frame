@@ -163,4 +163,49 @@ TestCase.new()
         },
     })
     :register()
+
+-- @covers CenterGossipFrame:shouldCentralizeIfMerchantFrame()
+TestCase.new()
+    :setName('shouldCentralizeIfMerchantFrame')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function(data)
+        _G['MerchantFrame'] = data.merchantFrame
+
+        CenterGossipFrame.tsmIntegration = Spy
+            .new()
+            :mockMethod('isTsmMerchantFrameVisible', function() return data.isTsmMerchantFrameVisible end)
+        
+        local result = CenterGossipFrame:shouldCentralizeIfMerchantFrame(data.frame)
+
+        lu.assertEquals(data.expectedResult, result)
+    end)
+    :setScenarios({
+        ['not MerchantFrame'] = {
+            frame = Spy.new(),
+            merchantFrame = Spy.new(),
+            isTsmMerchantFrameVisible = true,
+            expectedResult = true,
+        },
+        ['TSM not visible'] = function ()
+            local merchantFrame = Spy.new()
+
+            return {
+                frame = merchantFrame,
+                merchantFrame = merchantFrame,
+                isTsmMerchantFrameVisible = false,
+                expectedResult = true,
+            }
+        end,
+        ['TSM visible'] = function ()
+            local merchantFrame = Spy.new()
+
+            return {
+                frame = merchantFrame,
+                merchantFrame = merchantFrame,
+                isTsmMerchantFrameVisible = true,
+                expectedResult = false,
+            }
+        end,
+    })
+    :register()
 -- end of MultiTargetsTest

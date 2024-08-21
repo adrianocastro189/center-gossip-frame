@@ -78,6 +78,22 @@ function CenterGossipFrame:maybeCentralizeFrame(frame)
     end
 end
 
+--[[
+Determines whether the GossipFrame should be centralized or not if it's
+MerchantFrame.
+
+@NOTE: This is a temporary solution that will be migrated in upcoming versions when
+       every frame will be encapsulated in a class, so these conditions will be
+       later refactored.
+]]
+function CenterGossipFrame:shouldCentralizeIfMerchantFrame(frame)
+    local isMerchantFrame = frame == MerchantFrame
+
+    local isTsmEnabledForMerchantFrame = isMerchantFrame and CenterGossipFrame.tsmIntegration:isTsmMerchantFrameVisible()
+
+    return not isMerchantFrame or not isTsmEnabledForMerchantFrame
+end
+
 CenterGossipFrame:applyListener(GossipFrame)
 CenterGossipFrame:applyListener(MerchantFrame)
 CenterGossipFrame:applyListener(QuestFrame)
