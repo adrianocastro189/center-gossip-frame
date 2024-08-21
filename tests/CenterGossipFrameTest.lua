@@ -142,6 +142,7 @@ TestCase.new()
             .new(CenterGossipFrame)
             :mockMethod('isFrameCentered', function() return data.isFrameCentered end)
             :mockMethod('centralizeFrame')
+            :mockMethod('shouldCentralizeIfMerchantFrame', function() return data.shouldCentralizeIfMerchantFrame end)
 
         CenterGossipFrame:maybeCentralizeFrame(frame)
 
@@ -155,11 +156,18 @@ TestCase.new()
     :setScenarios({
         ['frame is centered'] = {
             isFrameCentered = true,
+            shouldCentralizeIfMerchantFrame = true,
             shouldInvokeCentralizeFrame = false,
         },
         ['frame is not centered'] = {
             isFrameCentered = false,
+            shouldCentralizeIfMerchantFrame = true,
             shouldInvokeCentralizeFrame = true,
+        },
+        ['MerchantFrame'] = {
+            isFrameCentered = true,
+            shouldCentralizeIfMerchantFrame = false,
+            shouldInvokeCentralizeFrame = false,
         },
     })
     :register()
@@ -173,7 +181,7 @@ TestCase.new()
 
         CenterGossipFrame.tsmIntegration = Spy
             .new()
-            :mockMethod('isTsmMerchantFrameVisible', function() return data.isTsmMerchantFrameVisible end)
+            :mockMethod('isMerchantFrameVisible', function() return data.isTsmMerchantFrameVisible end)
         
         local result = CenterGossipFrame:shouldCentralizeIfMerchantFrame(data.frame)
 

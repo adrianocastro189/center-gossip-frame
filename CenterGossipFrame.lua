@@ -73,6 +73,9 @@ May centralize a frame if it can be centralized.
 @param frame The frame to be centralized
 ]]
 function CenterGossipFrame:maybeCentralizeFrame(frame)
+    -- @TODO: Remove this condition when the frame class implementation is done <2024.08.21>
+    if not self:shouldCentralizeIfMerchantFrame(frame) then return end
+
     if not self:isFrameCentered(frame) then
         self:centralizeFrame(frame)
     end
@@ -89,7 +92,7 @@ MerchantFrame.
 function CenterGossipFrame:shouldCentralizeIfMerchantFrame(frame)
     local isMerchantFrame = frame == MerchantFrame
 
-    local isTsmEnabledForMerchantFrame = isMerchantFrame and CenterGossipFrame.tsmIntegration:isTsmMerchantFrameVisible()
+    local isTsmEnabledForMerchantFrame = isMerchantFrame and CenterGossipFrame.tsmIntegration:isMerchantFrameVisible()
 
     return not isMerchantFrame or not isTsmEnabledForMerchantFrame
 end
