@@ -6,6 +6,7 @@ Center Gossip Frame centralizes the following frames on the screen:
 * Merchant windows
 * Quest frames to accept, complete, and turn in quests
 * Taxi frame from the flight master
+* Trainer frames
 
 This addon was designed to make it easier for players to interact with NPCs
 and quest givers by centralizing the frames that are usually displayed on the
