@@ -28,7 +28,7 @@ BaseTestClass = {
 
         dofile('./CenterGossipFrame.lua')
 
-        dofile('./src/Integration/TradeSkillMasterIntegration.lua')
+        dofile('./src/Integrations/TradeSkillMasterIntegration.lua')
 
         CenterGossipFrame.events:handleOriginal(nil, 'PLAYER_LOGIN')
         CenterGossipFrame.output:setTestingMode()
@@ -84,7 +84,7 @@ dofile('./tests/spies.lua')
 
 dofile('./tests/CenterGossipFrameTest.lua')
 
-dofile('./tests/Integration/TradeSkillMasterIntegrationTest.lua')
+dofile('./tests/Integrations/TradeSkillMasterIntegrationTest.lua')
 
 lu.ORDER_ACTUAL_EXPECTED=false
 

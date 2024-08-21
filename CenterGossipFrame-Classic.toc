@@ -9,3 +9,5 @@
 lib\stormwind-library.lua
 
 CenterGossipFrame.lua
+
+src\Integrations\TradeSkillMasterIntegration.lua
