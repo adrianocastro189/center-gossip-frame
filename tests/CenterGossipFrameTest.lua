@@ -172,6 +172,45 @@ TestCase.new()
     })
     :register()
 
+-- @covers CenterGossipFrame:maybeRegisterClassTrainerFrame()
+TestCase.new()
+    :setName('maybeRegisterClassTrainerFrame')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function(data)
+        _G['ClassTrainerFrame'] = Spy.new()
+
+        CenterGossipFrame = Spy
+            .new(CenterGossipFrame)
+            :mockMethod('applyListener')
+
+        CenterGossipFrame.classTrainerFrameRegistered = data.classTrainerFrameRegistered
+
+        CenterGossipFrame:maybeRegisterClassTrainerFrame()
+
+        lu.assertTrue(CenterGossipFrame.classTrainerFrameRegistered)
+
+        if data.shouldRegister then
+            CenterGossipFrame:getMethod('applyListener'):assertCalledOnceWith(ClassTrainerFrame)
+            return
+        end
+
+        CenterGossipFrame:getMethod('applyListener'):assertNotCalled()
+    end)
+    :setScenarios({
+        ['flag is nil'] = {
+            classTrainerFrameRegistered = nil,
+            shouldRegister = true,
+        },
+        ['not registered'] = {
+            classTrainerFrameRegistered = false,
+            shouldRegister = true,
+        },
+        ['already registered'] = {
+            classTrainerFrameRegistered = true,
+            shouldRegister = false,
+        },
+    })
+
 -- @covers CenterGossipFrame:shouldCentralizeIfMerchantFrame()
 TestCase.new()
     :setName('shouldCentralizeIfMerchantFrame')
@@ -182,7 +221,7 @@ TestCase.new()
         CenterGossipFrame.tsmIntegration = Spy
             .new()
             :mockMethod('isMerchantFrameVisible', function() return data.isTsmMerchantFrameVisible end)
-        
+
         local result = CenterGossipFrame:shouldCentralizeIfMerchantFrame(data.frame)
 
         lu.assertEquals(data.expectedResult, result)
@@ -194,7 +233,7 @@ TestCase.new()
             isTsmMerchantFrameVisible = true,
             expectedResult = true,
         },
-        ['TSM not visible'] = function ()
+        ['TSM not visible'] = function()
             local merchantFrame = Spy.new()
 
             return {
@@ -204,7 +243,7 @@ TestCase.new()
                 expectedResult = true,
             }
         end,
-        ['TSM visible'] = function ()
+        ['TSM visible'] = function()
             local merchantFrame = Spy.new()
 
             return {
@@ -215,5 +254,21 @@ TestCase.new()
             }
         end,
     })
+    :register()
+
+TestCase.new()
+    :setName('TRAINER_UPDATE listener')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function()
+        _G['CenterGossipFrame'] = Spy
+            .new(CenterGossipFrame)
+            :mockMethod('maybeRegisterClassTrainerFrame')
+
+        CenterGossipFrame.events:handleOriginal(nil, 'TRAINER_UPDATE')
+
+        CenterGossipFrame
+            :getMethod('maybeRegisterClassTrainerFrame')
+            :assertCalledOnce()
+    end)
     :register()
 -- end of MultiTargetsTest

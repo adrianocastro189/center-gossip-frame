@@ -48,6 +48,8 @@ For now, there are no commands available for this addon.
 
 ### yyyy.mm.dd - version 1.2.0
 
+* New frames covered: Trainer Frame for learning class skills (Classic only) and
+  profession skills (all versions)
 * Fix an incompatibility issue with TradeSkillMaster that was causing the merchant 
   frame to be displayed twice on the screen when it was overriden by TSM UI
 * Update Stormwind Library to version 1.12.1
