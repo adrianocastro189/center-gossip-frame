@@ -20,4 +20,23 @@ local TradeSkillMasterIntegration = {}
     function TradeSkillMasterIntegration.__construct()
         return setmetatable({}, TradeSkillMasterIntegration)
     end
+
+    --[[
+    Determines whether the TSM merchant frame is visible or not.
+
+    By visible, it means that TSM is overriding the default merchant frame.
+    ]]
+    function TradeSkillMasterIntegration:isMerchantFrameVisible()
+        local success, result = pcall(function()
+            return
+                TSM_API ~= nil and
+                TSM_API.IsUIVisible ~= nil and
+                type(TSM_API.IsUIVisible) == 'function' and
+                TSM_API.IsUIVisible('VENDORING')
+        end)
+
+        -- success is a boolean that indicates if the pcall was successful, not
+        -- if the TSM UI is visible or not
+        return success and result
+    end
 -- end of TradeSkillMasterIntegration
