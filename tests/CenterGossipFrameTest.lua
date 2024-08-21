@@ -255,4 +255,20 @@ TestCase.new()
         end,
     })
     :register()
+
+TestCase.new()
+    :setName('TRAINER_UPDATE listener')
+    :setTestClass(TestCenterGossipFrame)
+    :setExecution(function()
+        _G['CenterGossipFrame'] = Spy
+            .new(CenterGossipFrame)
+            :mockMethod('maybeRegisterClassTrainerFrame')
+
+        CenterGossipFrame.events:handleOriginal(nil, 'TRAINER_UPDATE')
+
+        CenterGossipFrame
+            :getMethod('maybeRegisterClassTrainerFrame')
+            :assertCalledOnce()
+    end)
+    :register()
 -- end of MultiTargetsTest
