@@ -4,7 +4,8 @@ CenterGossipFrame = StormwindLibrary_v1_12_1.new({
     colors = {
         primary = 'ED5859'
     },
-    name = 'Center Gossip Frame'
+    name = 'Center Gossip Frame',
+    version = '1.2.0',
 })
 
 --[[
