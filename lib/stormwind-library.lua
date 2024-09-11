@@ -1,19 +1,19 @@
 
 --- Stormwind Library
 -- @module stormwind-library
-if (StormwindLibrary_v1_12_1) then return end
+if (StormwindLibrary_v1_13_0) then return end
         
-StormwindLibrary_v1_12_1 = {}
-StormwindLibrary_v1_12_1.__index = StormwindLibrary_v1_12_1
+StormwindLibrary_v1_13_0 = {}
+StormwindLibrary_v1_13_0.__index = StormwindLibrary_v1_13_0
 
-function StormwindLibrary_v1_12_1.new(props)
-    local self = setmetatable({}, StormwindLibrary_v1_12_1)
-    -- Library version = '1.12.1'
+function StormwindLibrary_v1_13_0.new(props)
+    local self = setmetatable({}, StormwindLibrary_v1_13_0)
+    -- Library version = '1.13.0'
 
 -- list of callbacks to be invoked when the library is loaded
 self.loadCallbacks = {}
 
---[[--
+--[[
 Removes the callback loader and its properties.
 ]]
 function self:destroyCallbackLoader()
@@ -23,7 +23,7 @@ function self:destroyCallbackLoader()
     self.onLoad = nil
 end
 
---[[--
+--[[
 Invokes all the callbacks that have been enqueued.
 ]]
 function self:invokeLoadCallbacks()
@@ -34,7 +34,7 @@ function self:invokeLoadCallbacks()
     self:destroyCallbackLoader()
 end
 
---[[--
+--[[
 Enqueues a callback function to be invoked when the library is loaded.
 
 @tparam function callback The callback function to be invoked when the library is loaded
@@ -52,7 +52,7 @@ self:onLoad(function()
 end)
 
 
---[[--
+--[[
 Dumps the values of variables and tables in the output, then dies.
 
 The dd() stands for "dump and die" and it's a helper function inspired by a PHP framework
@@ -227,6 +227,45 @@ local Arr = {}
     ]]
     function Arr:each(list, callback)
         for i, val in pairs(list) do callback(val, i) end
+    end
+
+    --[[--
+    Filters the list values based on a callback function.
+
+    The callback function must be a function that accepts (val) or (val, i)
+    where val is the object in the interaction and i it's index. It must return
+    a boolean value. When it evaluates to true, the value is stored in the results
+    table.
+
+    If list is an array, the results will be stored in a new array. If it's an
+    associative array, the results will be stored in a new associative array with
+    the same keys.
+
+    @tparam table list The list to be filtered
+    @tparam function callback The function to be called for each item in the list
+    
+    @treturn table The filtered list
+
+    @usage
+        local list = {1, 2, 3}
+        local results = library.arr:filter(list, function(val) return val > 1 end)
+        -- results = {2, 3}
+    ]]
+    function Arr:filter(list, callback)
+        local results = {}
+
+        self:each(list, function(val, i)
+            if callback(val, i) then
+                if self:isArray(list) then
+                    table.insert(results, val)
+                    return
+                end
+                
+                results[i] = val
+            end
+        end)
+
+        return results
     end
 
     --[[--
@@ -928,6 +967,27 @@ local Str = {}
     function Str:trim(value)
         return value and value:gsub("^%s*(.-)%s*$", "%1") or value
     end
+
+    --[[--
+    Returns the given string with the first character capitalized.
+
+    @NOTE: This function may not work properly if the string starts with a special
+           character, like an accent, because it uses Lua's default implementations
+           for sub and upper functions. It should be used with caution and better
+           when the string is known to start with a letter. Future implementations
+           may improve this behavior if needed.
+
+    @tparam string value The string to have the first character capitalized
+
+    @treturn string The string with the first character capitalized
+
+    @usage
+        local value = "hello, world!"
+        library.str:ucFirst(value) -- "Hello, world!"
+    ]]
+    function Str:ucFirst(value)
+        return value:sub(1, 1):upper() .. value:sub(2)
+    end
 -- end of Str
 
 self.str = Str
@@ -1052,6 +1112,7 @@ Allowed properties = {
     inventory: table, optional
         track: boolean, optional
     name: string, optional
+    settings: table, optional, read the documentation for more information
     version: string, optional
 }
 ]]
@@ -1064,6 +1125,7 @@ self.addon.inventory = self.arr:get(props or {}, 'inventory', {
     track = false,
 })
 self.addon.name = self.arr:get(props or {}, 'name')
+self.addon.settings = self.arr:get(props or {}, 'settings')
 self.addon.version = self.arr:get(props or {}, 'version')
 
 local requiredProperties = {
@@ -1076,13 +1138,13 @@ for _, property in ipairs(requiredProperties) do
     end
 end
 
---[[--
+--[[
 Contains a list of class structures that Stormwind Library can handle to allow
 instantiation, protection in case of abstractions, and inheritance.
 ]]
 self.classes = {}
 
---[[--
+--[[
 Maps all the possible class types Stormwind Library can handle.
 ]]
 self.classTypes = self.arr:freeze({
@@ -1090,7 +1152,7 @@ self.classTypes = self.arr:freeze({
     CLASS_TYPE_CONCRETE = 2,
 })
 
---[[--
+--[[
 Registers an abstract class.
 
 @tparam string classname The name of the abstract class to be registered
@@ -1101,7 +1163,7 @@ function self:addAbstractClass(classname, classStructure, clientFlavors)
     self:addClass(classname, classStructure, clientFlavors, self.classTypes.CLASS_TYPE_ABSTRACT)
 end
 
---[[--
+--[[
 Helper method that extends a class structure with another by a parent class name
 and also adds the class.
 
@@ -1118,7 +1180,7 @@ function self:addChildClass(classname, classStructure, parentClassname, clientFl
     self:addClass(classname, classStructure, clientFlavors, classType)
 end
 
---[[--
+--[[
 Registers a class so the library is able to instantiate it later.
 
 This method just updates the library classes table by registering a class
@@ -1150,7 +1212,7 @@ function self:addClass(classname, classStructure, clientFlavors, classType)
     end)
 end
 
---[[--
+--[[
 Provides class inheritance by extending a class structure with another by its
 name.
 
@@ -1170,7 +1232,7 @@ function self:extend(classStructure, parentClassname)
     setmetatable(classStructure, parentStructure)
 end
 
---[[--
+--[[
 Returns a class structure by its name.
 
 This method's the same as accessing self.classes[classname].
@@ -1186,7 +1248,7 @@ function self:getClass(classname, output)
     return self.classes[clientFlavor][classname][output or 'structure']
 end
 
---[[--
+--[[
 This method emulates the new keyword in OOP languages by instantiating a
 class by its name as long as the class has a __construct() method with or
 without parameters.
@@ -1205,6 +1267,611 @@ function self:new(classname, ...)
 
     return self:getClass(classname).__construct(...)
 end
+
+--[[--
+A setting is basically a configuration value that can be changed by players.
+
+Although a setting instance uses Core.Configuration internally for storage purposes,
+it's not meant to be used as a configuration value. Configuration values are wider
+and can be used in many ways, like saving UI states and even addon data. Settings
+are meant to allow players to change the behavior of the addon.
+
+@classmod Core.Settings.Setting
+]]
+local Setting = {}
+    Setting.__index = Setting
+    Setting.__ = self
+    self:addClass('Setting', Setting)
+
+    Setting.constants = self.arr:freeze({
+        PREFIX = '__settings',
+        SCOPE_GLOBAL = 'global',
+        SCOPE_PLAYER = 'player',
+        TYPE_BOOLEAN = 'boolean',
+        TYPE_NUMBER = 'number',
+        TYPE_STRING = 'string',
+    })
+
+    --[[--
+    Setting constructor.
+    ]]
+    function Setting.__construct()
+        local self = setmetatable({}, Setting)
+
+        self.accessibleByCommand = true
+        self.scope = self.constants.SCOPE_PLAYER
+        self.type = self.constants.TYPE_STRING
+
+        return self
+    end
+
+    --[[--
+    Gets a text that explains how to use the setting in a command.
+
+    @treturn string The command help content
+    ]]
+    function Setting:getCommandHelpContent()
+        return self.__.str:trim(
+            self:getFullyQualifiedId() ..
+            ' <' .. self.type .. '> ' ..
+            (self.description or '')
+        )
+    end
+
+    --[[--
+    Gets the configuration method to be used when saving the setting.
+
+    The configuration method varies between global and player settings, so this
+    method returns the proper method to be used in this instance.
+
+    @local
+
+    @treturn string The configuration method
+    ]]
+    function Setting:getConfigurationMethod()
+        return self.scope == self.constants.SCOPE_GLOBAL and 'config' or 'playerConfig'
+    end
+
+    --[[--
+    Gets the setting fully qualified id.
+
+    The fully qualified id is the setting id prefixed by the group id.
+
+    @treturn string The setting fully qualified id
+    ]]
+    function Setting:getFullyQualifiedId()
+        return self.group.id .. '.' .. self.id
+    end
+
+    --[[--
+    Gets the setting key, used to store the setting value in the configuration.
+
+    @local
+
+    @treturn string The setting key
+    ]]
+    function Setting:getKey()
+        return self.constants.PREFIX .. '.' .. self:getFullyQualifiedId()
+    end
+
+    --[[--
+    Gets the setting stored value.
+
+    @treturn any The setting stored value
+    ]]
+    function Setting:getValue()
+        local method = self:getConfigurationMethod()
+        local key = self:getKey()
+
+        return self.__[method](self.__, key, self.default)
+    end
+
+    --[[--
+    Determines whether the setting stored value evaluates to true.
+
+    This is a helper method that returns true if the stored value is any kind of
+    value that should be considered true using Support.Bool.
+
+    @see Support.Bool.isTrue
+
+    @treturn boolean Whether the setting stored value evaluates to true
+    ]]
+    function Setting:isTrue()
+        return self.__.bool:isTrue(self:getValue())
+    end
+
+    --[[--
+    Sets whether the setting is accessible by a command.
+
+    @tparam boolean value Whether the setting is accessible by a command
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setAccessibleByCommand(value)
+        self.accessibleByCommand = value
+        return self
+    end
+
+    --[[--
+    Sets the default value of this setting.
+
+    @tparam mixed value The setting's default value
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setDefault(value)
+        self.default = value
+        return self
+    end
+
+    --[[--
+    Sets the setting description.
+
+    @tparam string value The setting's description
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setDescription(value)
+        self.description = value
+        return self
+    end
+
+    --[[--
+    Sets the setting group.
+
+    @tparam Core.Settings.SettingGroup value The setting's group
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setGroup(value)
+        self.group = value
+        return self
+    end
+
+    --[[--
+    Sets the setting id.
+
+    @tparam string value The setting's id
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setId(value)
+        self.id = value
+        return self
+    end
+
+    --[[--
+    Sets the setting label.
+
+    @tparam string value The setting's label
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setLabel(value)
+        self.label = value
+        return self
+    end
+
+    --[[--
+    Sets the setting scope.
+
+    @tparam string value The setting's scope, listed in Setting.constants
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setScope(value)
+        self.scope = value
+        return self
+    end
+
+    --[[--
+    Sets the setting type.
+
+    @tparam string value The setting's type, listed in Setting.constants
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setType(value)
+        self.type = value
+        return self
+    end
+
+    --[[--
+    Sets the setting value and saves it.
+
+    @tparam any value The setting value
+
+    @treturn Core.Settings.Setting self
+    ]]
+    function Setting:setValue(value)
+
+        local oldValue = self:getValue()
+
+        if oldValue == value then
+            return self
+        end
+
+        local id = self:getFullyQualifiedId()
+        local key = self:getKey()
+        local method = self:getConfigurationMethod()
+        
+        self.__[method](self.__, {[key] = value})
+
+        self.__.events:notify('SETTING_UPDATED', id, oldValue, value)
+
+        return self
+    end
+-- end of Setting
+
+--[[--
+A SettingGroup is a collection of Setting instances.
+
+Settings must belong to a group to exist in an addon context. Groups are mostly used
+to organize settings in a logical way and present them to players in a user-friendly
+manner.
+
+If an addon doesn't include any groups, all settings will be placed in a general
+group.
+
+@classmod Core.Settings.SettingGroup
+]]
+local SettingGroup = {}
+    SettingGroup.__index = SettingGroup
+    SettingGroup.__ = self
+    self:addClass('SettingGroup', SettingGroup)
+
+    --[[--
+    SettingGroup constructor.
+    ]]
+    function SettingGroup.__construct()
+        local self = setmetatable({}, SettingGroup)
+
+        self.settings = {}
+
+        return self
+    end
+
+    --[[--
+    Adds a setting to the group.
+
+    @tparam Core.Settings.Setting setting The setting to be added
+
+    @treturn Core.Settings.SettingGroup self
+    ]]
+    function SettingGroup:addSetting(setting)
+        self.settings[setting.id] = setting
+        setting:setGroup(self)
+        return self
+    end
+
+    --[[--
+    Gets all settings in this group.
+
+    @treturn table[Core.Settings.Setting] All the settings in this group
+    ]]
+    function SettingGroup:all()
+        return self.settings
+    end
+
+    --[[--
+    Gets all settings in this group that are accessible by a command.
+
+    @treturn table[Core.Settings.Setting] All the settings in this group that are accessible by a command
+    ]]
+    function SettingGroup:allAccessibleByCommand()
+        return self.__.arr:filter(self.settings, function(setting)
+            return setting.accessibleByCommand
+        end)
+    end
+
+    --[[--
+    Gets a setting in this group by its id.
+
+    It's important to pass the setting id, not the fully qualified id.
+
+    @tparam string id The setting id
+
+    @treturn Core.Settings.Setting|nil The setting instance
+    ]]
+    function SettingGroup:getSetting(id)
+        return self.settings[id]
+    end
+
+    --[[--
+    Gets a setting value in this group by its id.
+
+    It's important to pass the setting id, not the fully qualified id.
+
+    If the setting doesn't exist, this method won't throw an error, but return nil.
+
+    @tparam string id The setting id
+
+    @treturn any|nil The setting value
+    ]]
+    function SettingGroup:getSettingValue(id)
+        local setting = self:getSetting(id)
+
+        if setting then
+            -- this can't be placed in an inline return statement because it would
+            -- return nil if the setting value is falsy
+            return setting:getValue()
+        end
+
+        return nil
+    end
+
+    --[[--
+    Determines whether this group has settings.
+
+    @treturn boolean Whether this group has settings
+    ]]
+    function SettingGroup:hasSettings()
+        return self.__.arr:count(self.settings) > 0
+    end
+
+    --[[--
+    Determines whether this group has at least one settings that's accessible by a command.
+
+    @treturn boolean Whether this group has at least one settings that's accessible by a command
+    ]]
+    function SettingGroup:hasSettingsAccessibleByCommand()
+        return self.__.arr:any(self.settings, function(setting)
+            return setting.accessibleByCommand
+        end)
+    end
+
+    --[[--
+    Sets the setting group id.
+
+    @tparam string value The setting group's id
+
+    @treturn Core.Settings.SettingGroup self
+    ]]
+    function SettingGroup:setId(value)
+        self.id = value
+        return self
+    end
+
+    --[[--
+    Sets the setting group label.
+
+    @tparam string value The setting group's label
+
+    @treturn Core.Settings.SettingGroup self
+    ]]
+    function SettingGroup:setLabel(value)
+        self.label = value
+        return self
+    end
+-- end of SettingGroup
+
+--[[--
+Settings is the class that holds all the settings for the addon.
+
+It maintains a list of setting groups, which in turn maintain a list of settings.
+
+@classmod Core.Settings.Settings
+]]
+local Settings = {}
+    Settings.__index = Settings
+    Settings.__ = self
+    self:addClass('Settings', Settings)
+
+    --[[--
+    Settings constructor.
+    ]]
+    function Settings.__construct()
+        local self = setmetatable({}, Settings)
+
+        self.settingGroups = {}
+
+        return self
+    end
+
+    --[[--
+    Adds a setting to a group represented by its id.
+
+    @tparam Core.Settings.Setting setting The setting to be added
+    @tparam[opt='general'] string group The id of the group to which the setting will be added
+
+    @treturn Core.Settings.Settings self
+    ]]
+    function Settings:addSetting(setting, group)
+        group = group or 'general'
+
+        self:maybeAddGeneralGroup()
+
+        self.settingGroups[group]:addSetting(setting)
+    end
+
+    --[[--
+    Adds a setting group to the list of setting groups.
+
+    @tparam Core.Settings.SettingGroup settingGroup The setting group to be added
+
+    @treturn Core.Settings.Settings self
+    ]]
+    function Settings:addSettingGroup(settingGroup)
+        self.settingGroups[settingGroup.id] = settingGroup
+    end
+
+    --[[--
+    Gets all the setting instances that are stored in the setting groups.
+
+    @treturn table[Core.Settings.Setting] The setting instances
+    ]]
+    function Settings:all()
+        return self:listSettings('all')
+    end
+
+    --[[--
+    Gets all the command accessible setting instances that are stored in the
+    setting groups.
+
+    @treturn table[Core.Settings.Setting] The setting instances that are accessible by command
+    ]]
+    function Settings:allAccessibleByCommand()
+        return self:listSettings('allAccessibleByCommand')
+    end
+
+    --[[--
+    Determines whether the addon has at least one setting.
+
+    This method accepts an optional parameter that allows the caller to specify
+    the method to be called for each setting group to determine whether it has
+    at least one setting. With that, it's possible to add more filters in the future
+    without replicating the same logic.
+
+    @tparam[opt='hasSettings'] string settingGroupMethod The method to be called for each setting group
+
+    @treturn boolean Whether the addon has at least one setting
+    ]]
+    function Settings:hasSettings(settingGroupMethod)
+        settingGroupMethod = settingGroupMethod or 'hasSettings'
+        return self.__.arr:any(self.settingGroups, function(settingGroup)
+            return settingGroup[settingGroupMethod](settingGroup)
+        end)
+    end
+
+    --[[--
+    Determines whether the addon has at least one setting that is accessible by
+    command.
+
+    @treturn boolean Whether the addon has at least one setting that is accessible by command
+    ]]
+    function Settings:hasSettingsAccessibleByCommand()
+        return self:hasSettings('hasSettingsAccessibleByCommand')
+    end
+
+    --[[--
+    Lists settings by invoking a method on each setting group.
+
+    @local
+
+    @tparam string groupMethod The method to be called for each setting group
+
+    @treturn table[Core.Settings.Setting] The setting instances
+    ]]
+    function Settings:listSettings(groupMethod)
+        local settings = {}
+
+        self.__.arr:each(self.settingGroups, function(settingGroup)
+            settings = self.__.arr:concat(settings, settingGroup[groupMethod](settingGroup))
+        end)
+
+        return settings
+    end
+
+    --[[--
+    Gets all the settings that were configured in the addon properties to convert
+    them into real setting and setting group instances.
+
+    Although not a local method, addons shouldn't call this method directly as it
+    is meant to be called by the library during the initialization process.
+    ]]
+    function Settings:mapFromAddonProperties()
+        if self.__.addon.settings == nil then
+            return
+        end
+
+        self.__.arr:each(self.__.addon.settings.groups, function(group)
+            local settingGroup = self.__
+                :new('SettingGroup')
+                :setId(group.id)
+                :setLabel(group.label)
+
+            self:addSettingGroup(settingGroup)
+
+            self.__.arr:each(group.settings, function(setting)
+                local settingInstance = self.__
+                    :new('Setting')
+                    :setId(setting.id)
+                    :setLabel(setting.label)
+                    :setDescription(setting.description)
+                    :setType(setting.type)
+                    :setDefault(setting.default)
+                    :setScope(setting.scope)
+                    :setAccessibleByCommand(setting.accessibleByCommand)
+
+                self:addSetting(settingInstance, group.id)
+            end)
+        end)
+    end
+
+    --[[--
+    Maybe adds the general setting group to the list of setting groups if it doesn't
+    already exist.
+
+    @local
+    ]]
+    function Settings:maybeAddGeneralGroup()
+        if not self.settingGroups['general'] then
+            local generalGroup = self.__
+                :new('SettingGroup')
+                :setId('general')
+                :setLabel('General')
+
+            self:addSettingGroup(generalGroup)
+        end
+    end
+
+    --[[--
+    Maybe creates the library Settings instance if the library configuration is
+    enabled.
+
+    This method works as a static method that shouldn't be called directly by
+    addons. It's just a way to isolate its logic from the library onLoad callback,
+    which is the only place where it should be called.
+
+    If configuration is not enabled, this method will bail out early and won't
+    create any Settings instance.
+
+    @local
+    ]]
+    function Settings.maybeCreateLibraryInstance()
+        local library = Settings.__
+        if library:isConfigEnabled() then
+            library.settings = library:new('Settings')
+            library.settings:mapFromAddonProperties()
+            library.commands:maybeAddSettingsOperations()
+            -- proxy method to get a setting instance by its fully qualified id
+            library.setting = function(self, settingFullyQualifiedId)
+                return self.settings:setting(settingFullyQualifiedId)
+            end
+        end
+    end
+
+    --[[--
+    Gets a setting instance by its fully qualified id.
+
+    The fully qualified id is the id of the setting group followed by a dot and
+    the id of the setting. If a single setting id is passed, it's assumed to be
+    part of the general group.
+
+    @tparam string settingFullyQualifiedId The fully qualified id of the setting
+
+    @treturn Core.Settings.Setting|nil The setting instance
+    ]]
+    function Settings:setting(settingFullyQualifiedId)
+        local id = self.__.str:split(settingFullyQualifiedId, '.')
+
+        local isFullyQualified = #id == 2
+
+        local groupId = isFullyQualified and id[1] or 'general'
+        local settingId = isFullyQualified and id[2] or id[1]
+
+        local group = self.settingGroups[groupId]
+
+        return group and group:getSetting(settingId) or nil
+    end
+-- end of Settings
+
+self:onLoad(function()
+    self.events:listen(self.events.EVENT_NAME_PLAYER_LOGIN, function()
+        -- initializes the library Settings instance
+        self:getClass('Settings').maybeCreateLibraryInstance()
+    end)
+end)
 
 
 --[[--
@@ -1882,7 +2549,36 @@ local CommandsHandler = {}
     end
 
     --[[--
-    This method adds a help operation to the commands handler.
+    Adds a get operation to the commands handler.
+
+    The get operation is a default operation that can be overridden in case the
+    addon wants to provide a custom get command. This implementation gets the value
+    of a setting and prints it to the chat frame.
+
+    To be accessible by the get operation, the setting must be registered in the
+    settings handler as accessible by command.
+
+    @TODO: Move the callback in this method to a separate function or class <2024.09.10>
+
+    @see Core.Settings.Setting.setAccessibleByCommand
+
+    @local
+    ]]
+    function CommandsHandler:addGetOperation()
+        self:addOperation('get', 'Gets the value of a setting identified by its id', function (settingId)
+            local setting = self.__:setting(settingId)
+
+            if setting and setting.accessibleByCommand then
+                self.__.output:out(settingId.. ' = '..tostring(setting:getValue()))
+                return
+            end
+
+            self.__.output:out('Setting not found: '..settingId)
+        end)
+    end
+
+    --[[--
+    Adds a help operation to the commands handler.
 
     The help operation is a default operation that can be overridden in
     case the addon wants to provide a custom help command. For that, just
@@ -1895,13 +2591,110 @@ local CommandsHandler = {}
     @local
     ]]
     function CommandsHandler:addHelpOperation()
-        local helpCommand = self.__:new('Command')
+        self:addOperation('help', 'Shows the available operations for this command', function () self:printHelp() end)
+    end
 
-        helpCommand:setOperation('help')
-        helpCommand:setDescription('Shows the available operations for this command.')
-        helpCommand:setCallback(function () self:printHelp() end)
+    --[[--
+    Adds a new operation to the commands handler.
 
-        self:add(helpCommand)
+    This is a local method and should not be called directly by addons.
+
+    @local
+
+    @tparam string operation The operation that will trigger the callback
+    @tparam string description The description of the operation
+    @tparam function callback The callback that will be triggered when the operation is called
+    ]]
+    function CommandsHandler:addOperation(operation, description, callback)
+        local command = self.__:new('Command')
+
+        command:setOperation(operation)
+        command:setDescription(description)
+        command:setCallback(callback)
+
+        self:add(command)
+    end
+
+    --[[--
+    Adds a set operation to the commands handler.
+
+    The set operation is a default operation that can be overridden in case the
+    addon wants to provide a custom set command. This implementation sets the value
+    of a setting and prints the result to the chat frame.
+
+    To be accessible by the set operation, the setting must be registered in the
+    settings handler as accessible by command.
+
+    @TODO: Move the callback in this method to a separate function or class <2024.09.10>
+
+    @see Core.Settings.Setting.setAccessibleByCommand
+
+    @local
+    ]]
+    function CommandsHandler:addSetOperation()
+        self:addOperation('set', 'Sets the value of a setting identified by its id', function (settingId, newValue)
+            local setting = self.__:setting(settingId)
+
+            if setting and setting.accessibleByCommand then
+                setting:setValue(newValue)
+                self.__.output:out(settingId.. ' set with '..newValue)
+                return
+            end
+
+            self.__.output:out('Setting not found: '..settingId)
+        end)
+    end
+
+    --[[--
+    Adds a settings operation to the commands handler.
+
+    The settings operation is a default operation that can be overridden in case the
+    addon wants to provide a custom settings command. This implementation prints a
+    list of all settings that are accessible by command and their descriptions.
+
+    To be listed by the settings operation, the setting must be registered in the
+    settings handler as accessible by command.
+
+    @TODO: Move the callback in this method to a separate function or class <2024.09.10>
+
+    @see Core.Settings.Setting.setAccessibleByCommand
+
+    @local
+    ]]
+    function CommandsHandler:addSettingsOperation()
+        self:addOperation('settings', 'Lists all the setting ids that can be used by get or set', function ()
+            local introduction =
+                'Available settings, that can be retrieved with '..
+                self.__.output:color(self.slashCommand..' get {id}')..' '..
+                'and updated with '..
+                self.__.output:color(self.slashCommand..' set {id} {value}')..' '..
+                'by replacing '..
+                self.__.output:color('{id}')..' '..
+                'with any of the ids listed below and '..
+                self.__.output:color('{value}')..' '..
+                'with the new value'
+
+            local helpContent = {introduction}
+
+            self.__.arr:each(self.__.settings:allAccessibleByCommand(), function (setting)
+                table.insert(helpContent, setting:getCommandHelpContent())
+            end)
+
+            self.__.output:out(helpContent)
+        end)
+    end
+
+    --[[--
+    Adds all the default operations related to the settings structure.
+
+    @TODO: Move the callback in this method to a separate function or class <2024.09.10>
+
+    @local
+    ]]
+    function CommandsHandler:addSettingsOperations()
+        self:addGetOperation()
+        self:addSetOperation()
+        self:addSettingsOperation()
     end
 
     --[[--
@@ -1969,6 +2762,20 @@ local CommandsHandler = {}
                 self:parseArguments(commandArg)
             )
         )
+    end
+
+    --[[--
+    May add the default settings operations to the commands handler if there's at
+    least one setting that is accessible by command.
+
+    @TODO: Move this method to a separate function or class <2024.09.10>
+
+    @local
+    ]]
+    function CommandsHandler:maybeAddSettingsOperations()
+        if self.__.settings and self.__.settings:hasSettingsAccessibleByCommand() then
+            self:addSettingsOperations()
+        end
     end
 
     --[[--
@@ -2763,7 +3570,7 @@ local RetailTooltip = {}
     ]]
     function RetailTooltip:registerTooltipHandlers()
         TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tooltip, data)
-            self:onItemTooltipShow(tooltip);
+            self:onItemTooltipShow(tooltip)
         end)
 
         TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip, data)
