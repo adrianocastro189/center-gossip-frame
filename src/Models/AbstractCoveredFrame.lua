@@ -11,7 +11,7 @@ local AbstractCoveredFrame = {}
     AbstractCoveredFrame.__index = AbstractCoveredFrame
     AbstractCoveredFrame.gameFrame = nil
 
-    CenterGossipFrame:addAbstractClass('AbstractCoveredFrame', AbstractCoveredFrame)
+    CenterGossipFrame:addAbstractClass('CenterGossipFrame/AbstractCoveredFrame', AbstractCoveredFrame)
 
     --[[
     Applies a listener to the game frame OnUpdate event.
