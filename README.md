@@ -47,6 +47,10 @@ For now, there are no commands available for this addon.
 
 ## Changelog
 
+### yyyy.mm.dd - version 1.3.0
+
+* Update Stormwind Library to version 1.13.0
+
 ### 2024.08.21 - version 1.2.0
 
 * New frames covered: Trainer Frame for learning class skills (Classic only) and

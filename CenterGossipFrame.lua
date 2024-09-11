@@ -1,11 +1,11 @@
 ---@diagnostic disable: duplicate-set-field
 
-CenterGossipFrame = StormwindLibrary_v1_12_1.new({
+CenterGossipFrame = StormwindLibrary_v1_13_0.new({
     colors = {
         primary = 'ED5859'
     },
     name = 'Center Gossip Frame',
-    version = '1.2.0',
+    version = '1.3.0',
 })
 
 --[[
