@@ -1,16 +1,22 @@
 TestAbstractCoveredFrame = BaseTestClass:new()
 
+-- helper method to instantiate the abstract class
+function TestAbstractCoveredFrame:instance()
+    -- instantiating an abstract class here is ok for the sake of testing
+    return setmetatable({}, CenterGossipFrame:getClass('AbstractCoveredFrame'))
+end
+
 -- @covers AbstractCoveredFrame
 TestCase.new()
     :setName('abstraction')
     :setTestClass(TestAbstractCoveredFrame)
     :setExecution(function()
-        local class = CenterGossipFrame:getClass('AbstractCoveredFrame')
+        local instance = TestAbstractCoveredFrame:instance()
 
         local expectedMsg = 'This is an abstract method and should be implemented by this class inheritances'
 
-        lu.assertErrorMsgContains(expectedMsg, class.register)
-        lu.assertErrorMsgContains(expectedMsg, class.shouldCentralize)
+        lu.assertErrorMsgContains(expectedMsg, instance.register)
+        lu.assertErrorMsgContains(expectedMsg, instance.shouldCentralize)
     end)
     :register()
 
