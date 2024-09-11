@@ -20,7 +20,11 @@ local AbstractCoveredFrame = {}
     centered if necessary.
     ]]
     function AbstractCoveredFrame:applyListener()
-        -- @TODO: Implement this method in CG2 <2024.09.11>
+        if not self:canBeCentralized() then return end
+
+        self.gameFrame:HookScript('OnUpdate', function()
+            self:maybeCentralizeFrame()
+        end)
     end
 
     --[[--

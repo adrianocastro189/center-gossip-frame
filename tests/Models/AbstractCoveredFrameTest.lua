@@ -24,9 +24,36 @@ TestCase.new()
 TestCase.new()
     :setName('applyListener')
     :setTestClass(TestAbstractCoveredFrame)
-    :setExecution(function()
-        -- @TODO: Implement this method in CG2 <2024.09.11>
+    :setExecution(function(data)
+        local instance = Spy
+            .new(TestAbstractCoveredFrame:instance())
+            :mockMethod('canBeCentralized', function() return data.canBeCentralized end)
+            :mockMethod('maybeCentralizeFrame')
+        
+        local gameFrame = Spy
+            .new({})
+            :mockMethod('HookScript', function(_, _, callback)
+                callback()
+            end)
+
+        instance.gameFrame = gameFrame
+
+        instance:applyListener()
+
+        instance
+            :getMethod('maybeCentralizeFrame')
+            :assertCalledOrNot(data.shouldCentralize)
     end)
+    :setScenarios({
+        ['can be centralized'] = {
+            canBeCentralized = true,
+            shouldCentralize = true,
+        },
+        ['cannot be centralized'] = {
+            canBeCentralized = false,
+            shouldCentralize = false,
+        },
+    })
     :register()
 
 -- @covers AbstractCoveredFrame:canBeCentralized()
