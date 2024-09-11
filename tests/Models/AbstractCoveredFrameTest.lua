@@ -121,9 +121,46 @@ TestCase.new()
 TestCase.new()
     :setName('isFrameCentered')
     :setTestClass(TestAbstractCoveredFrame)
-    :setExecution(function()
-        -- @TODO: Implement this method in CG5 <2024.09.11>
+    :setExecution(function(data)
+        _G['UIParent'] = 'UIParent'
+
+        local gameFrame = Spy
+            .new()
+            :mockMethod('GetPoint', function()
+                return
+                    data.point,
+                    data.relativeTo,
+                    data.relativePoint,
+                    data.offsetX,
+                    data.offsetY
+            end)
+
+        local instance = TestAbstractCoveredFrame:instance()
+        
+        instance.gameFrame = gameFrame
+        
+        local result = instance:isFrameCentered(gameFrame)
+
+        lu.assertEquals(data.expectedResult, result)
     end)
+    :setScenarios({
+        ['frame is not centered'] = {
+            point = 'TOPLEFT',
+            relativeTo = 'UIParent',
+            relativePoint = 'TOPLEFT',
+            offsetX = 0,
+            offsetY = 0,
+            expectedResult = false,
+        },
+        ['frame is centered'] = {
+            point = 'CENTER',
+            relativeTo = 'UIParent',
+            relativePoint = 'CENTER',
+            offsetX = 0,
+            offsetY = 0,
+            expectedResult = true,
+        },
+    })
     :register()
 
 -- @covers AbstractCoveredFrame:maybeCentralizeFrame()

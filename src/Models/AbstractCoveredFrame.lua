@@ -53,7 +53,14 @@ local AbstractCoveredFrame = {}
     @treturn boolean
     ]]
     function AbstractCoveredFrame:isFrameCentered()
-        -- @TODO: Implement this method in CG5 <2024.09.11>
+        local point, relativeTo, relativePoint, offsetX, offsetY = self.gameFrame:GetPoint()
+
+        return
+            point == 'CENTER' and
+            relativeTo == UIParent and
+            relativePoint == 'CENTER' and
+            offsetX == 0 and
+            offsetY == 0
     end
 
     --[[--
