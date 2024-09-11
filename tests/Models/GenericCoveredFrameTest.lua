@@ -12,3 +12,18 @@ TestCase.new()
         lu.assertEquals(gameFrame, instance.gameFrame)
     end)
     :register()
+
+-- @covers GenericCoveredFrame:register()
+TestCase.new()
+    :setName('register')
+    :setTestClass(TestGenericCoveredFrame)
+    :setExecution(function()
+        local instance = Spy
+            .new(CenterGossipFrame:new('GenericCoveredFrame', Spy.new()))
+            :mockMethod('applyListener')
+
+        instance:register()
+
+        instance:getMethod('applyListener'):assertCalledOnce()
+    end)
+    :register()

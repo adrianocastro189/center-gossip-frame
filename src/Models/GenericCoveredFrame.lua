@@ -1,4 +1,4 @@
---[[--
+--[[
 GenericCoveredFrame covers the majority of the frames in World of Warcraft and it's
 the default implementation of AbstractCoveredFrame.
 ]]
@@ -7,7 +7,7 @@ local GenericCoveredFrame = {}
 
     CenterGossipFrame:addChildClass('GenericCoveredFrame', GenericCoveredFrame, 'AbstractCoveredFrame')
 
-    --[[--
+    --[[
     GenericCoveredFrame constructor.
     ]]
     function GenericCoveredFrame.__construct(gameFrame)
@@ -16,5 +16,10 @@ local GenericCoveredFrame = {}
         self.gameFrame = gameFrame
 
         return self
+    end
+
+    --[[ @inheritDoc ]]
+    function GenericCoveredFrame:register()
+        self:applyListener()
     end
 -- end of GenericCoveredFrame
