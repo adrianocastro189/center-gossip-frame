@@ -7,7 +7,7 @@ TestCase.new()
     :setExecution(function()
         local gameFrame = Spy.new()
 
-        local instance = CenterGossipFrame:new('GenericCoveredFrame', gameFrame)
+        local instance = CenterGossipFrame:new('CenterGossipFrame/GenericCoveredFrame', gameFrame)
 
         lu.assertEquals(gameFrame, instance.gameFrame)
     end)
@@ -19,7 +19,7 @@ TestCase.new()
     :setTestClass(TestGenericCoveredFrame)
     :setExecution(function()
         local instance = Spy
-            .new(CenterGossipFrame:new('GenericCoveredFrame', Spy.new()))
+            .new(CenterGossipFrame:new('CenterGossipFrame/GenericCoveredFrame', Spy.new()))
             :mockMethod('applyListener')
 
         instance:register()
@@ -33,7 +33,7 @@ TestCase.new()
     :setName('shouldCentralize')
     :setTestClass(TestGenericCoveredFrame)
     :setExecution(function()
-        local instance = CenterGossipFrame:new('GenericCoveredFrame', Spy.new())
+        local instance = CenterGossipFrame:new('CenterGossipFrame/GenericCoveredFrame', Spy.new())
 
         lu.assertIsTrue(instance:shouldCentralize())
     end)

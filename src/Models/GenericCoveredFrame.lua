@@ -5,7 +5,7 @@ the default implementation of AbstractCoveredFrame.
 local GenericCoveredFrame = {}
     GenericCoveredFrame.__index = GenericCoveredFrame
 
-    CenterGossipFrame:addChildClass('GenericCoveredFrame', GenericCoveredFrame, 'AbstractCoveredFrame')
+    CenterGossipFrame:addChildClass('CenterGossipFrame/GenericCoveredFrame', GenericCoveredFrame, 'CenterGossipFrame/AbstractCoveredFrame')
 
     --[[
     GenericCoveredFrame constructor.

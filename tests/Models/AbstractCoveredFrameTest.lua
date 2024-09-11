@@ -3,7 +3,7 @@ TestAbstractCoveredFrame = BaseTestClass:new()
 -- helper method to instantiate the abstract class
 function TestAbstractCoveredFrame:instance()
     -- instantiating an abstract class here is ok for the sake of testing
-    return setmetatable({}, CenterGossipFrame:getClass('AbstractCoveredFrame'))
+    return setmetatable({}, CenterGossipFrame:getClass('CenterGossipFrame/AbstractCoveredFrame'))
 end
 
 -- @covers AbstractCoveredFrame
