@@ -7,7 +7,7 @@ TestCase.new()
     :setExecution(function()
         local instance = CenterGossipFrame:new('CenterGossipFrame/ClassTrainerCoveredFrame')
 
-        lu.assertIsFalse(instance.registered)
+        lu.assertNotNil(instance)
     end)
     :register()
 
@@ -46,7 +46,17 @@ TestCase.new()
     :setName('register')
     :setTestClass(TestClassTrainerCoveredFrame)
     :setExecution(function()
+        local instance = Spy
+            .new(CenterGossipFrame:new('CenterGossipFrame/ClassTrainerCoveredFrame'))
+            :mockMethod('maybeRegisterOnTrainerUpdate')
 
+        instance:register()
+
+        instance:getMethod('maybeRegisterOnTrainerUpdate'):assertNotCalled()
+
+        CenterGossipFrame.events:handleOriginal(nil, 'TRAINER_UPDATE')
+
+        instance:getMethod('maybeRegisterOnTrainerUpdate'):assertCalledOnce()
     end)
     :register()
 

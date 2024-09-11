@@ -18,11 +18,7 @@ local ClassTrainerCoveredFrame = {}
     ClassTrainerCoveredFrame constructor.
     ]]
     function ClassTrainerCoveredFrame.__construct()
-        local self = setmetatable({}, ClassTrainerCoveredFrame)
-
-        self.registered = false
-
-        return self
+        return setmetatable({}, ClassTrainerCoveredFrame)
     end
 
     --[[
@@ -37,6 +33,9 @@ local ClassTrainerCoveredFrame = {}
 
     --[[ @inheritDoc ]]
     function ClassTrainerCoveredFrame:register()
+        CenterGossipFrame.events:listenOriginal('TRAINER_UPDATE', function()
+            self:maybeRegisterOnTrainerUpdate()
+        end)
     end
 
     --[[ @inheritDoc ]]
