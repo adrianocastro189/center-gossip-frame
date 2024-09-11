@@ -49,3 +49,12 @@ TestCase.new()
         -- @TODO: Implement this method in CG5 <2024.09.11>
     end)
     :register()
+
+-- @covers AbstractCoveredFrame:maybeCentralizeFrame()
+TestCase.new()
+    :setName('maybeCentralizeFrame')
+    :setTestClass(TestAbstractCoveredFrame)
+    :setExecution(function()
+        -- @TODO: Implement this method in CG6 <2024.09.11>
+    end)
+    :register()

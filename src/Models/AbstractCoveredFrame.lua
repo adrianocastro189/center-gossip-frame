@@ -49,6 +49,13 @@ local AbstractCoveredFrame = {}
     end
 
     --[[--
+    May centralize the frame.
+    ]]
+    function AbstractCoveredFrame:maybeCentralizeFrame()
+        -- @TODO: Implement this method in CG6 <2024.09.11>
+    end
+
+    --[[--
     Registers the covered frame in the addon.
 
     It stores an instance of the covered frame so Center Gossip Frame can centralize
