@@ -67,7 +67,9 @@ local AbstractCoveredFrame = {}
     May centralize the frame.
     ]]
     function AbstractCoveredFrame:maybeCentralizeFrame()
-        -- @TODO: Implement this method in CG6 <2024.09.11>
+        if self:shouldCentralize() and not self:isFrameCentered() then
+            self:centralizeFrame()
+        end
     end
 
     --[[--
