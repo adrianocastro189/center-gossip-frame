@@ -99,7 +99,21 @@ TestCase.new()
     :setName('centralizeFrame')
     :setTestClass(TestAbstractCoveredFrame)
     :setExecution(function()
-        -- @TODO: Implement this method in CG4 <2024.09.11>
+        _G['UIParent'] = Spy.new({})
+
+        local gameFrame = Spy
+            .new({})
+            :mockMethod('ClearAllPoints')
+            :mockMethod('SetPoint')
+
+        local instance = TestAbstractCoveredFrame:instance()
+
+        instance.gameFrame = gameFrame
+
+        instance:centralizeFrame()
+
+        gameFrame:getMethod('ClearAllPoints'):assertCalledOnce()
+        gameFrame:getMethod('SetPoint'):assertCalledOnceWith('CENTER', UIParent, 'CENTER', 0, 0)
     end)
     :register()
 

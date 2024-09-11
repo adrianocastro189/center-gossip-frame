@@ -43,7 +43,8 @@ local AbstractCoveredFrame = {}
     Centralizes the game frame.
     ]]
     function AbstractCoveredFrame:centralizeFrame()
-        -- @TODO: Implement this method in CG4 <2024.09.11>
+        self.gameFrame:ClearAllPoints()
+        self.gameFrame:SetPoint('CENTER', UIParent, 'CENTER', 0, 0)
     end
 
     --[[--
