@@ -11,3 +11,5 @@ lib\stormwind-library.lua
 CenterGossipFrame.lua
 
 src\Integrations\TradeSkillMasterIntegration.lua
+
+src\Models\AbstractCoveredFrame.lua
