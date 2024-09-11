@@ -40,6 +40,15 @@ local AbstractCoveredFrame = {}
     end
 
     --[[--
+    Determines whether the frame is centered.
+
+    @treturn boolean
+    ]]
+    function AbstractCoveredFrame:isFrameCentered()
+        -- @TODO: Implement this method in CG5 <2024.09.11>
+    end
+
+    --[[--
     Registers the covered frame in the addon.
 
     It stores an instance of the covered frame so Center Gossip Frame can centralize
