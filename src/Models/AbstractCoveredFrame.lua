@@ -33,6 +33,13 @@ local AbstractCoveredFrame = {}
     end
 
     --[[--
+    Centralizes the game frame.
+    ]]
+    function AbstractCoveredFrame:centralizeFrame()
+        -- @TODO: Implement this method in CG4 <2024.09.11>
+    end
+
+    --[[--
     Registers the covered frame in the addon.
 
     It stores an instance of the covered frame so Center Gossip Frame can centralize

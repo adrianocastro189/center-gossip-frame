@@ -31,3 +31,12 @@ TestCase.new()
         -- @TODO: Implement this method in CG3 <2024.09.11>
     end)
     :register()
+
+-- @covers AbstractCoveredFrame:centralizeFrame()
+TestCase.new()
+    :setName('centralizeFrame')
+    :setTestClass(TestAbstractCoveredFrame)
+    :setExecution(function()
+        -- @TODO: Implement this method in CG4 <2024.09.11>
+    end)
+    :register()
