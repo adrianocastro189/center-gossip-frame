@@ -33,7 +33,10 @@ local AbstractCoveredFrame = {}
     @treturn boolean
     ]]
     function AbstractCoveredFrame:canBeCentralized()
-        -- @TODO: Implement this method in CG3 <2024.09.11>
+        return
+            self.gameFrame ~= nil and
+            self.gameFrame.ClearAllPoints ~= nil and
+            self.gameFrame.SetPoint ~= nil
     end
 
     --[[--
