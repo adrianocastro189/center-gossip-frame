@@ -1,4 +1,4 @@
---[[--
+--[[
 An abstract covered frame is a class that wraps a game frame that is covered by
 Center Gossip Frame.
 
@@ -13,7 +13,7 @@ local AbstractCoveredFrame = {}
 
     CenterGossipFrame:addAbstractClass('AbstractCoveredFrame', AbstractCoveredFrame)
 
-    --[[--
+    --[[
     Applies a listener to the game frame OnUpdate event.
 
     The listener is called every time the game frame is updated so it can be
@@ -27,7 +27,7 @@ local AbstractCoveredFrame = {}
         end)
     end
 
-    --[[--
+    --[[
     Determines whether the frame can be centralized.
 
     @treturn boolean
@@ -39,7 +39,7 @@ local AbstractCoveredFrame = {}
             self.gameFrame.SetPoint ~= nil
     end
 
-    --[[--
+    --[[
     Centralizes the game frame.
     ]]
     function AbstractCoveredFrame:centralizeFrame()
@@ -47,7 +47,7 @@ local AbstractCoveredFrame = {}
         self.gameFrame:SetPoint('CENTER', UIParent, 'CENTER', 0, 0)
     end
 
-    --[[--
+    --[[
     Determines whether the frame is centered.
 
     @treturn boolean
@@ -63,7 +63,7 @@ local AbstractCoveredFrame = {}
             offsetY == 0
     end
 
-    --[[--
+    --[[
     May centralize the frame.
     ]]
     function AbstractCoveredFrame:maybeCentralizeFrame()
@@ -72,7 +72,7 @@ local AbstractCoveredFrame = {}
         end
     end
 
-    --[[--
+    --[[
     Registers the covered frame in the addon.
 
     It stores an instance of the covered frame so Center Gossip Frame can centralize
@@ -82,7 +82,7 @@ local AbstractCoveredFrame = {}
         error('This is an abstract method and should be implemented by this class inheritances')
     end
 
-    --[[--
+    --[[
     Determines whether the frame should be centralized.
 
     This method should be implemented by the concrete classes that inherit from
