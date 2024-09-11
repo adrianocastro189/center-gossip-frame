@@ -13,3 +13,12 @@ TestCase.new()
         lu.assertErrorMsgContains(expectedMsg, class.shouldCentralize)
     end)
     :register()
+
+-- @covers AbstractCoveredFrame:applyListener()
+TestCase.new()
+    :setName('applyListener')
+    :setTestClass(TestAbstractCoveredFrame)
+    :setExecution(function()
+        -- @TODO: Implement this method in CG2 <2024.09.11>
+    end)
+    :register()

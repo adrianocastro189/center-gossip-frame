@@ -14,6 +14,16 @@ local AbstractCoveredFrame = {}
     CenterGossipFrame:addAbstractClass('AbstractCoveredFrame', AbstractCoveredFrame)
 
     --[[--
+    Applies a listener to the game frame OnUpdate event.
+
+    The listener is called every time the game frame is updated so it can be
+    centered if necessary.
+    ]]
+    function AbstractCoveredFrame:applyListener()
+        -- @TODO: Implement this method in CG2 <2024.09.11>
+    end
+
+    --[[--
     Registers the covered frame in the addon.
 
     It stores an instance of the covered frame so Center Gossip Frame can centralize
