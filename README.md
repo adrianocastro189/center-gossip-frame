@@ -47,7 +47,7 @@ For now, there are no commands available for this addon.
 
 ## Changelog
 
-### yyyy.mm.dd - version 1.3.0
+### 2024.09.11 - version 1.3.0
 
 * Internal improvements to the centralization process
 * Update Stormwind Library to version 1.13.0
