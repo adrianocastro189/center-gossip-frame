@@ -60,9 +60,38 @@ TestCase.new()
 TestCase.new()
     :setName('canBeCentralized')
     :setTestClass(TestAbstractCoveredFrame)
-    :setExecution(function()
-        -- @TODO: Implement this method in CG3 <2024.09.11>
+    :setExecution(function(data)
+        local instance = TestAbstractCoveredFrame:instance()
+
+        instance.gameFrame = data.gameFrame
+
+        lu.assertEquals(data.expectedResult, instance:canBeCentralized())
     end)
+    :setScenarios({
+        ['nil gameFrame'] = {
+            gameFrame = nil,
+            expectedResult = false,
+        },
+        ['no ClearAllPoints'] = {
+            gameFrame = {
+                SetPoint = function() end,
+            },
+            expectedResult = false,
+        },
+        ['no SetPoint'] = {
+            gameFrame = {
+                ClearAllPoints = function() end,
+            },
+            expectedResult = false,
+        },
+        ['all methods available'] = {
+            gameFrame = {
+                ClearAllPoints = function() end,
+                SetPoint = function() end,
+            },
+            expectedResult = true,
+        },
+    })
     :register()
 
 -- @covers AbstractCoveredFrame:centralizeFrame()
