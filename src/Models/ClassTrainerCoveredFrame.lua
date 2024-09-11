@@ -25,6 +25,16 @@ local ClassTrainerCoveredFrame = {}
         return self
     end
 
+    --[[
+    May register the frame if it's not already registered.
+    ]]
+    function ClassTrainerCoveredFrame:maybeRegisterOnTrainerUpdate()
+        if not self.gameFrame then
+            self.gameFrame = ClassTrainerFrame
+            self:applyListener()
+        end
+    end
+
     --[[ @inheritDoc ]]
     function ClassTrainerCoveredFrame:register()
     end
