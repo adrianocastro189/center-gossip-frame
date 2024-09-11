@@ -13,4 +13,5 @@ CenterGossipFrame.lua
 src\Integrations\TradeSkillMasterIntegration.lua
 
 src\Models\AbstractCoveredFrame.lua
+src\Models\ClassTrainerCoveredFrame.lua
 src\Models\GenericCoveredFrame.lua
