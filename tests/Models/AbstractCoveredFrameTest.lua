@@ -167,7 +167,34 @@ TestCase.new()
 TestCase.new()
     :setName('maybeCentralizeFrame')
     :setTestClass(TestAbstractCoveredFrame)
-    :setExecution(function()
-        -- @TODO: Implement this method in CG6 <2024.09.11>
+    :setExecution(function(data)
+        local instance = Spy
+            .new(TestAbstractCoveredFrame:instance())
+            :mockMethod('shouldCentralize', function() return data.shouldCentralize end)
+            :mockMethod('isFrameCentered', function() return data.isFrameCentered end)
+            :mockMethod('centralizeFrame')
+
+        instance:maybeCentralizeFrame()
+
+        instance
+            :getMethod('centralizeFrame')
+            :assertCalledOrNot(data.shouldCallCentralizeFrame)
     end)
+    :setScenarios({
+        ['should not centralize'] = {
+            shouldCentralize = false,
+            isFrameCentered = false,
+            shouldCallCentralizeFrame = false,
+        },
+        ['frame is centered'] = {
+            shouldCentralize = true,
+            isFrameCentered = true,
+            shouldCallCentralizeFrame = false,
+        },
+        ['should centralize'] = {
+            shouldCentralize = true,
+            isFrameCentered = false,
+            shouldCallCentralizeFrame = true,
+        },
+    })
     :register()
