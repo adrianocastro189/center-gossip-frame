@@ -22,4 +22,9 @@ local GenericCoveredFrame = {}
     function GenericCoveredFrame:register()
         self:applyListener()
     end
+
+    --[[ @inheritDoc ]]
+    function GenericCoveredFrame:shouldCentralize()
+        return true
+    end
 -- end of GenericCoveredFrame
