@@ -1,5 +1,10 @@
 # Center Gossip Frame
 
+**⚠️ NOV 11, 2024 - THIS PROJECT IS PAUSED FOR AN INDEFINITE PERIOD:** Due to other dev
+priorities requiring my attention in recent weeks, I have decided to pause the development
+of Center Gossip Frame. I greatly appreciate all the support and feedback received
+so far and intend to resume work as soon as I complete the ongoing projects.
+
 Center Gossip Frame centralizes the following frames on the screen:
 
 * Gossip windows in general
